@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+import os
+import uvicorn
 
 import models, schemas, crud
 from database import engine, get_db
@@ -43,3 +45,10 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Task CRUD API. Visit /docs for Swagger UI."}
+
+
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
