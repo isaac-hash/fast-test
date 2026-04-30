@@ -12,6 +12,14 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Task CRUD API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],     # <--- Allows ALL origins
+    allow_credentials=False, # <--- MUST be False if using "*"
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.post("/tasks/", response_model=schemas.TaskResponse, status_code=status.HTTP_201_CREATED)
 def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
     return crud.create_task(db=db, task=task)
